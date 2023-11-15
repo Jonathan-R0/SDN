@@ -8,6 +8,10 @@ class Topo(Topo):
         host1 = self.addHost('host_1')
         self.addLink(switches[0], host1)
         host2 = self.addHost('host_2')
-        self.addLink(switches[-1], host2)
+        self.addLink(switches[0], host2)
+        host3 = self.addHost('host_3')
+        self.addLink(switches[-1], host3)
+        host4 = self.addHost('host_3')
+        self.addLink(switches[-1], host4)
 
 topos = { 'customTopo': Topo }
