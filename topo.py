@@ -11,7 +11,7 @@ class Topo(Topo):
         self.addLink(switches[0], host2)
         host3 = self.addHost('host_3')
         self.addLink(switches[-1], host3)
-        host4 = self.addHost('host_3')
+        host4 = self.addHost('host_4')
         self.addLink(switches[-1], host4)
 
 topos = { 'customTopo': Topo }
