@@ -1,0 +1,6 @@
+{
+    "rule_1": false,
+    "rule_2": true,
+    "blocked_host": "10.0.0.1",
+    "rule_3": false
+}

@@ -13,6 +13,7 @@ import os
 # Add your imports here ...
 from pox.lib.packet.ethernet import ethernet
 from pox.lib.packet.ipv4 import ipv4
+import json
 
 log = core.getLogger()
 
@@ -20,52 +21,58 @@ log = core.getLogger()
 
 class Firewall(EventMixin) :
 
-    def __init__(self):
+    def __init__(self, h1, h2):
         self.listenTo(core.openflow)
+        self.h1 = h1
+        self.h2 = h2
+        self.rules = self._import_rules()
         log.debug("Enabling Firewall Module")
+    
+    def _import_rules(self):
+        with open("rules.rules", "r") as f:
+            return json.load(f)
 
     def _handle_ConnectionUp(self, event):
         # Add your logic here ...
         log.debug("Switch %s has come up.", dpidToStr(event.dpid))
 
         # Agregar reglas al switch cuando se establece la conexión
-        self.add_firewall_rules(event.connection)
-    
-    def add_firewall_rules(self, connection):
+        if self.rules["rule_1"]:
+            self.filter_port_80(event)
+        elif self.rules["rule_2"]:
+            self.filter_UDP_h1_5001(event)
+        elif self.rules["rule_3"]:
+            self.filter_hosts(event)
+
+    def filter_port_80(self, event):
         # Regla 1: Descartar todos los mensajes cuyo puerto destino sea 80
         match = of.ofp_match()
         match.dl_type = ethernet.IP_TYPE
         match.tp_dst = 80
-        self.add_drop_rule(connection, match)
+        self.add_drop_rule(event.connection, match)
 
+    def filter_UDP_h1_5001(self, event):
         # Regla 2: Descartar mensajes que provengan del host 1, tengan como puerto destino el 5001 y usen UDP
         match = of.ofp_match()
         match.dl_type = ethernet.IP_TYPE
-        match.nw_src = "10.0.0.1"  # Reemplaza con la dirección IP del host 1
+        match.dl_src = ethernet.IPAddr(self.rules["blocked_host"])
         match.tp_dst = 5001
         match.nw_proto = ipv4.UDP_PROTOCOL
-        self.add_drop_rule(connection, match)
+        self.add_drop_rule(event.connection, match)
 
+    def filter_hosts(self, event):
         # Regla 3: Bloquear la comunicación entre dos hosts específicos
-        # Reemplaza estas direcciones IP con las de los hosts que no deben comunicarse
-        src_host = "10.0.0.2"
-        dst_host = "10.0.0.3"
         match = of.ofp_match()
         match.dl_type = ethernet.IP_TYPE
-        match.nw_src = src_host
-        match.nw_dst = dst_host
-        self.add_drop_rule(connection, match)
-    
-    def add_drop_rule(self, connection, match):
-        msg = of.ofp_flow_mod()
-        msg.match = match
-        connection.send(msg)
+        match.nw_src = self.h1
+        match.nw_dst = self.h2
+        self.add_drop_rule(event.connection, match)
 
     def add_drop_rule(self, connection, match):
         msg = of.ofp_flow_mod()
         msg.match = match
         connection.send(msg)
 
-    def launch():
+    def launch(h1 = None, h2 = None):
         # Starting the Firewall module
-        core.registerNew(Firewall)
+        core.registerNew(Firewall, h1, h2)
