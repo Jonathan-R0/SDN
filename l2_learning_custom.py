@@ -1,7 +1,8 @@
+# coding=utf-8
 from pox.core import core
-import pox.openflow.libopenflow_01 as of
-from pox.lib.util import str_to_bool  # Agrega esta línea
+from pox.lib.util import str_to_bool
 from pox.forwarding.l2_learning import LearningSwitch
+import pox.openflow.libopenflow_01 as of
 
 log = core.getLogger()
 
