@@ -38,7 +38,7 @@ Explicación para Linux Ubuntu.
 4) Pruebas:
     - _Descartar mensajes del puerto 80:_
         - En host_1: iperf -s -p 80 (servidor)
-        - En host_2: iperf -c 10.0.0.2 -p 80 (cliente)
+        - En host_2: iperf -c 10.0.0.1 -p 80 (cliente)
 
     - _Descartar mensajes de UDP con puerto de salida 5001 del host 1:_
         - En host_1: iperf -s -u -p 5001 (servidor)
