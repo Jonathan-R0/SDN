@@ -1,9 +1,9 @@
 # SDN
-Software Defined Network POX &amp; Mininet - TP2
+**Software Defined Network POX &amp; Mininet - TP2**
 
-Requisito previo: 
-    - copiar del repo **ls_learning_custom.py** a **pox/pox/forwarding/** (quedará junto a **ls_learning.py** que ya está ahí).
-    - copiar del repo **firewall.py** a **pox/ext**
+Requisitos previos:   
+    - Copiar del repositorio **ls_learning_custom.py** a **pox/pox/forwarding/** (quedará junto a **ls_learning.py** que ya está ahí).  
+    - Copiar del repositorio **firewall.py** a **pox/ext**  
 
 Explicación para Linux Ubuntu.
 1) Abrir una terminal.
@@ -18,7 +18,7 @@ Explicación para Linux Ubuntu.
         **./pox.py firewall log.level --DEBUG forwarding.l2_learning_custom**
  
 2) Abrir otra terminal, para Mininet.
-   * Entrar en la carpeta del repo:
+   * Entrar en la carpeta del repositorio:
    **cd "[carpeta]/SDN"**
 
     * Ejecutar **sudo mn --custom topo.py --topo customTopo,num_switches=4 --controller=remote,ip=127.0.0.1,port=6633**
