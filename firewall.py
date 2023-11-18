@@ -1,3 +1,4 @@
+# coding: utf-8
 # Coursera :
 # - Software Defined Networking ( SDN ) course
 # -- Programming Assignment : Layer -2 Firewall Application Professor : Nick Feamster
