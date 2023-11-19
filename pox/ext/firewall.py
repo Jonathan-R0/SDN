@@ -44,8 +44,7 @@ class Firewall(EventMixin):
         elif self.rules["rule_2"]:
             self.filter_UDP_h1_5001(event)
         elif self.rules["rule_3"]:
-            # self.filter_hosts(event)
-            exit(1)
+            self.filter_hosts(event)
 
     def filter_UDP_h1_5001(self, event):
         # Regla 2: Descartar mensajes que provengan del host 1, tengan como puerto destino el 5001 y usen UDP
@@ -54,15 +53,14 @@ class Firewall(EventMixin):
         match.dl_src = EthAddr('00:00:00:00:00:01')
         match.tp_dst = 5001
         match.nw_proto = pkt.ipv4.UDP_PROTOCOL
-        self.add_drop_rule(event.connection, match)
+        self.add_drop_rule(event, match)
 
     def filter_port_80(self, event):
         match = of.ofp_match()
         match.dl_type = pkt.ethernet.IP_TYPE
         match.nw_proto = pkt.ipv4.TCP_PROTOCOL
         match.tp_dst = 80
-        msg_port = of.ofp_flow_mod(match=match)
-        event.connection.send(msg_port)
+        self.add_drop_rule(event, match)
 
     def filter_hosts(self, event):
         # Regla 3: Bloquear la comunicación entre dos hosts específicos
@@ -70,12 +68,11 @@ class Firewall(EventMixin):
         match.dl_type = pkt.ethernet.IP_TYPE
         match.nw_src = self.h1
         match.nw_dst = self.h2
-        self.add_drop_rule(event.connection, match)
+        self.add_drop_rule(event, match)
 
-    def add_drop_rule(self, connection, match):
-        msg = of.ofp_flow_mod()
-        msg.match = match
-        connection.send(msg)
+    def add_drop_rule(self, event, match):
+        msg = of.ofp_flow_mod(match=match)
+        event.connection.send(msg)
 
 
 def launch():
