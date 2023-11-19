@@ -13,20 +13,18 @@ import pox.forwarding.l2_learning
 from pox.lib.addresses import EthAddr
 from collections import namedtuple
 import pox.lib.packet as pkt
-import os
 import json
 
 log = core.getLogger()
-
-
-# Add your global variables here ...
 
 class Firewall(EventMixin):
 
     def __init__(self):
         self.listenTo(core.openflow)
+        '''
         self.h1 = EthAddr("00:00:00:00:00:01")
         self.h2 = EthAddr("00:00:00:00:00:02")
+        '''
         self.rules = self._import_rules()
         log.debug("Enabling Firewall Module")
 
@@ -35,17 +33,37 @@ class Firewall(EventMixin):
             return json.load(f)
 
     def _handle_ConnectionUp(self, event):
-        # Add your logic here ...
         log.debug("Switch %s has come up.", dpidToStr(event.dpid))
-
         # Agregar reglas al switch cuando se establece la conexión
+        for rule in self.rules:
+            self.add_rule(rule, event)
+        '''
         if self.rules["rule_1"]:
             self.filter_port_80(event)
         elif self.rules["rule_2"]:
             self.filter_UDP_h1_5001(event)
         elif self.rules["rule_3"]:
             self.filter_hosts(event)
-
+            '''
+    
+    def add_rule(self, rule, event):
+        match = of.ofp_match()
+        match.dl_type = pkt.ethernet.IP_TYPE
+        if "dl_src" in rule:  
+            match.dl_src = EthAddr(rule["dl_src"])
+        if "dl_dst" in rule:  
+            match.dl_dst = EthAddr(rule["dl_dst"])
+        if "tp_dst" in rule:
+            match.tp_dst = rule["tp_dst"]
+        if "nw_proto" in rule:
+            if rule["nw_proto"] == "UDP":    
+                match.nw_proto = pkt.ipv4.UDP_PROTOCOL
+            elif rule["nw_proto"] == "TCP":
+                match.nw_proto = pkt.ipv4.TCP_PROTOCOL
+        msg = of.ofp_flow_mod(match=match)
+        event.connection.send(msg)
+        
+    '''
     def filter_UDP_h1_5001(self, event):
         # Regla 2: Descartar mensajes que provengan del host 1, tengan como puerto destino el 5001 y usen UDP
         match = of.ofp_match()
@@ -73,7 +91,7 @@ class Firewall(EventMixin):
     def add_drop_rule(self, event, match):
         msg = of.ofp_flow_mod(match=match)
         event.connection.send(msg)
-
+    '''
 
 def launch():
     '''
