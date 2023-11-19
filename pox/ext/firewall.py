@@ -32,7 +32,6 @@ class Firewall(EventMixin):
             self.add_rule(rule, event)
 
     def add_rule(self, rule, event):
-        
         match = of.ofp_match()
         match.dl_type = pkt.ethernet.IP_TYPE
         match.dl_src = EthAddr(rule["dl_src"]) if "dl_src" in rule else EthAddr("00:00:00:00:00:00")
