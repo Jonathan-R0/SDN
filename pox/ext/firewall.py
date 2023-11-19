@@ -5,7 +5,6 @@ from pox.lib.revent import *
 from pox.lib.util import dpidToStr
 import pox.forwarding.l2_learning
 from pox.lib.addresses import EthAddr
-from collections import namedtuple
 import pox.lib.packet as pkt
 import json
 
@@ -33,14 +32,12 @@ class Firewall(EventMixin):
             self.add_rule(rule, event)
 
     def add_rule(self, rule, event):
+        
         match = of.ofp_match()
         match.dl_type = pkt.ethernet.IP_TYPE
-        if "dl_src" in rule:  
-            match.dl_src = EthAddr(rule["dl_src"])
-        if "dl_dst" in rule:  
-            match.dl_dst = EthAddr(rule["dl_dst"])
-        if "tp_dst" in rule:
-            match.tp_dst = rule["tp_dst"]
+        match.dl_src = EthAddr(rule["dl_src"]) if "dl_src" in rule else EthAddr("00:00:00:00:00:00")
+        match.dl_dst = EthAddr(rule["dl_dst"]) if "dl_dst" in rule else EthAddr("00:00:00:00:00:00")
+        match.tp_dst = int(rule["tp_dst"]) if "tp_dst" in rule else of.OFPFW_ALL
         if "nw_proto" in rule:
             if rule["nw_proto"] == "UDP":    
                 match.nw_proto = pkt.ipv4.UDP_PROTOCOL
@@ -50,6 +47,7 @@ class Firewall(EventMixin):
         log.debug("Adding rule: %s", str(rule))
         log.debug("Sending flow mod: %s", str(msg))
         event.connection.send(msg)
+        log.debug("Rule added and flow mod sent.")
         
 
 def launch():
