@@ -47,7 +47,6 @@ class Firewall(EventMixin):
         log.debug("Sending flow mod: %s", str(msg))
         event.connection.send(msg)
         log.debug("Rule added and flow mod sent.")
-        
 
 def launch():
     '''
