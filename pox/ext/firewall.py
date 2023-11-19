@@ -44,8 +44,7 @@ class Firewall(EventMixin):
         elif self.rules["rule_2"]:
             self.filter_UDP_h1_5001(event)
         elif self.rules["rule_3"]:
-            # self.filter_hosts(event)
-            exit(1)
+            self.filter_hosts(event)
 
     def filter_UDP_h1_5001(self, event):
         # Regla 2: Descartar mensajes que provengan del host 1, tengan como puerto destino el 5001 y usen UDP
