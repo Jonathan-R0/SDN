@@ -30,7 +30,7 @@ class Firewall(EventMixin) :
         log.debug("Enabling Firewall Module")
     
     def _import_rules(self):
-        with open("rules/rules.rules", "r") as f:
+        with open("rules.rules", "r") as f:
             return json.load(f)
 
     def _handle_ConnectionUp(self, event):
