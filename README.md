@@ -31,10 +31,10 @@ Explicación para Linux Ubuntu.
         - En host_1: `iperf -s -p 80` (servidor)
         - En host_2: `iperf -c 10.0.0.1 -p 80` (cliente)
 
-    - _Descartar mensajes de UDP con puerto de salida 5001 del host 1:_
-        - En host_1: `iperf -s -u -p 5001` (servidor)
-        - En host_2: `iperf -c 10.0.0.1 -u -p 5001` (cliente)
-
+    - _Descartar mensajes de UDP con puerto destino 5001 del host 1:_
+        - En host_2: `iperf -s -u -p 5001` (servidor)
+        - En host_1: `iperf -c 10.0.0.2 -u -p 5001` (cliente)
+        
     - _Descartar mensajes de 2 hosts cualquiera:_ (O sino con pingall es mas directa la prueba)
         - En host_1: `iperf -s -u -p 6969` (servidor)
         - En host_2: `iperf -c 10.0.0.3 -u -p 6969` (cliente)
