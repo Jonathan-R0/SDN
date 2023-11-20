@@ -15,10 +15,12 @@ class Firewall(EventMixin):
 
     def __init__(self):
         self.listenTo(core.openflow)
-        self.rules = self._import_rules()
+        json_file = self._import_json()
+        self.switch_dpid = json_file["switch_dpid"] if "switch_dpid" in json_file else None
+        self.rules = json_file["rules"] if "rules" in json_file else []
         log.debug("Enabling Firewall Module")
 
-    def _import_rules(self):
+    def _import_json(self):
         with open("./ext/rules.rules", "r") as f:
             return json.load(f)
     
@@ -28,10 +30,11 @@ class Firewall(EventMixin):
             log.debug("Packet from %s to %s, with data %s",  packet.find("ipv4").srcip, packet.find("ipv4").dstip, packet.payload)
 
     def _handle_ConnectionUp(self, event):
-        log.debug("Switch %s has come up.", dpidToStr(event.dpid))
-        # Agregar reglas al switch cuando se establece la conexión
-        for rule in self.rules:
-            self.add_rule(rule, event)
+        if event.dpid == self.switch_dpid or self.switch_dpid == None:
+            log.debug("Switch %s has come up.", dpidToStr(event.dpid))
+            # Agregar reglas al switch cuando se establece la conexión
+            for rule in self.rules:
+                self.add_rule(rule, event)
 
     def add_rule(self, rule, event):
         match = of.ofp_match()
