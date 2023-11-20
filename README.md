@@ -19,7 +19,7 @@ Explicación para Linux Ubuntu.
 2) Abrir otra terminal, para Mininet.
     - Entrar en la carpeta del repositorio: `cd path/to/SDN`.
 
-    - Ejecutar `sudo mn --custom topo.py --topo customTopo,num_switches=4 ---mac --arp --switch ovsk --controller remote,ip=127.0.0.1,port=6633` (se puede cambiar la cantidad de switches).
+    - Ejecutar `sudo mn --custom topo.py --topo customTopo,num_switches=4 --mac --arp --switch ovsk --controller remote,ip=127.0.0.1,port=6633` (se puede cambiar la cantidad de switches).
 
 3) Ejecutar en la terminal de mininet:
 
