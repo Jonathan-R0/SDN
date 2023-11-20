@@ -38,3 +38,7 @@ Explicación para Linux Ubuntu.
     - _Descartar mensajes de 2 hosts cualquiera:_ (O sino con pingall es mas directa la prueba)
         - En host_1: `iperf -s -u -p 6969` (servidor)
         - En host_2: `iperf -c 10.0.0.3 -u -p 6969` (cliente)
+
+5) Notas: para obtener el **dpid** (datapath id) de un switch y poder aplicarle reglas a este específicamente, se puede
+correr en mininet `dpctl show` lo cuál muestra mucha información de cada siwtch, la primer fila de respuesta de
+cada siwtch, contiene el **dpid**.
