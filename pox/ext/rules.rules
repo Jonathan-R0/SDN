@@ -1,4 +1,5 @@
 {
+  "switch_dpid": "0000000000000001",
   "rules":  [
               {
                 "nw_proto": "TCP",

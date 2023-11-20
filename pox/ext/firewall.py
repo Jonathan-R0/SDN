@@ -16,7 +16,7 @@ class Firewall(EventMixin):
     def __init__(self):
         self.listenTo(core.openflow)
         json_file = self._import_json()
-        self.switch_dpid = json_file["switch_dpid"] if "switch_dpid" in json_file else None
+        self.switch_dpid = int(json_file["switch_dpid"]) if "switch_dpid" in json_file else None
         self.rules = json_file["rules"] if "rules" in json_file else []
         log.debug("Enabling Firewall Module")
 
