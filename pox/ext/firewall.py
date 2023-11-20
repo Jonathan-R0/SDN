@@ -4,7 +4,7 @@ import pox.openflow.libopenflow_01 as of
 from pox.lib.revent import *
 from pox.lib.util import dpidToStr
 import pox.forwarding.l2_learning
-from pox.lib.addresses import EthAddr
+from pox.lib.addresses import EthAddr, IPAddr
 import pox.lib.packet as pkt
 import json
 
@@ -40,6 +40,8 @@ class Firewall(EventMixin):
             match.dl_src = EthAddr(rule["dl_src"])
         if "dl_dst" in rule:
             match.dl_dst = EthAddr(rule["dl_dst"])
+        if "tp_src" in rule:
+            match.tp_src = rule["tp_src"]
         if "tp_dst" in rule:
             match.tp_dst = rule["tp_dst"] 
         if "nw_proto" in rule:
@@ -47,6 +49,10 @@ class Firewall(EventMixin):
                 match.nw_proto = pkt.ipv4.UDP_PROTOCOL
             elif rule["nw_proto"] == "TCP":
                 match.nw_proto = pkt.ipv4.TCP_PROTOCOL
+        if "nw_src" in rule:
+            match.nw_src = IPAddr(rule["nw_src"])
+        if "nw_dst" in rule:
+            match.nw_dst = IPAddr(rule["nw_dst"])
         msg = of.ofp_flow_mod(match=match)
         log.debug("Adding rule: %s", str(rule))
         log.debug("Sending flow mod: %s", str(msg))
