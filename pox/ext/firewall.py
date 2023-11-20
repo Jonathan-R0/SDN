@@ -48,10 +48,14 @@ class Firewall(EventMixin):
         if "tp_dst" in rule:
             match.tp_dst = rule["tp_dst"]
         if "nw_proto" in rule:
-            if rule["nw_proto"] == "UDP":    
+            if rule["nw_proto"] == "UDP":
                 match.nw_proto = pkt.ipv4.UDP_PROTOCOL
             elif rule["nw_proto"] == "TCP":
                 match.nw_proto = pkt.ipv4.TCP_PROTOCOL
+            elif rule["nw_proto"] == "ICMP":
+                match.nw_proto = pkt.ipv4.ICMP_PROTOCOL
+            else:
+                match.nw_proto = int(rule["nw_proto"])
         if "nw_src" in rule:
             match.nw_src = IPAddr(rule["nw_src"])
         if "nw_dst" in rule:

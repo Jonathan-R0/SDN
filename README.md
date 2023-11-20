@@ -39,6 +39,9 @@ Explicación para Linux Ubuntu.
         - En host_1: `iperf -s -u -p 6969` (servidor)
         - En host_2: `iperf -c 10.0.0.3 -u -p 6969` (cliente)
 
+    - _Prueba adicional: bloqueo de ICMP, con hosts 3 y 4 abiertos, en mininet: `xterm host_3 host_4`
+        - En host_3: `ping 10.0.0.4`
+        
 5) Notas: para obtener el **dpid** (datapath id) de un switch y poder aplicarle reglas a este específicamente, se puede
 correr en mininet `dpctl show` lo cuál muestra mucha información de cada siwtch, la primer fila de respuesta de
 cada siwtch, contiene el **dpid**.
