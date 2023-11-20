@@ -41,9 +41,9 @@ class Firewall(EventMixin):
         if "dl_dst" in rule:
             match.dl_dst = EthAddr(rule["dl_dst"])
         if "tp_src" in rule:
-            match.tp_src = rule["tp_src"]
+            match.tp_src = int(rule["tp_src"])
         if "tp_dst" in rule:
-            match.tp_dst = rule["tp_dst"] 
+            match.tp_dst = int(rule["tp_dst"]) 
         if "nw_proto" in rule:
             if rule["nw_proto"] == "UDP":    
                 match.nw_proto = pkt.ipv4.UDP_PROTOCOL
