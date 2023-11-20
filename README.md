@@ -7,7 +7,7 @@ Requisitos previos respecto a POX, por única vez, copiar del repositorio a la c
 - Logueo adicional en el controlador: copiar del repositorio `pox/ls_learning_custom.py` a `pox/pox/forwarding/` (quedará junto a `ls_learning.py` que ya está ahí).
 - Firewall: copiar del repositorio `pox/ext/firewall.py` a `pox/ext/`.   
 - Reglas para el firewall: copiar del repositorio `pox/ext/rules.rules` a `pox/ext`.
-- Bug fix ("ERROR:packet:(dns) parsing questions: ord() expected string of length 1, but int found..."): copiar del repositorio `pox/pox/lib/packet/dns.py` a `pox/pox/lib packet/`.
+- Bug fix ("ERROR:packet:(dns) parsing questions: ord() expected string of length 1, but int found..."): copiar del repositorio `pox/pox/lib/packet/dns.py` a `pox/pox/lib/packet/`.
 
 
 Explicación para Linux Ubuntu.
