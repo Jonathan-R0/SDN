@@ -20,10 +20,12 @@ class Firewall(EventMixin):
     def _import_rules(self):
         with open("./ext/rules.rules", "r") as f:
             return json.load(f)
-        
+
+    '''    
     def _handle_PacketIn(self, event):
         packet = event.parsed
         log.debug("Received packet: %s", packet)
+    '''
 
     def _handle_ConnectionUp(self, event):
         log.debug("Switch %s has come up.", dpidToStr(event.dpid))
@@ -34,9 +36,12 @@ class Firewall(EventMixin):
     def add_rule(self, rule, event):
         match = of.ofp_match()
         match.dl_type = pkt.ethernet.IP_TYPE
-        match.dl_src = EthAddr(rule["dl_src"]) if "dl_src" in rule else EthAddr("00:00:00:00:00:00")
-        match.dl_dst = EthAddr(rule["dl_dst"]) if "dl_dst" in rule else EthAddr("00:00:00:00:00:00")
-        match.tp_dst = int(rule["tp_dst"]) if "tp_dst" in rule else of.OFPFW_ALL
+        if "dl_src" in rule:
+            match.dl_src = EthAddr(rule["dl_src"])
+        if "dl_dst" in rule:
+            match.dl_dst = EthAddr(rule["dl_dst"])
+        if "tp_dst" in rule:
+            match.tp_dst = rule["tp_dst"] 
         if "nw_proto" in rule:
             if rule["nw_proto"] == "UDP":    
                 match.nw_proto = pkt.ipv4.UDP_PROTOCOL

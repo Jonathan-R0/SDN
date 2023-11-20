@@ -1,5 +1,6 @@
 [
   {
+    "nw_proto": "TCP",
     "tp_dst": 80
   },
   {
