@@ -35,12 +35,13 @@ Explicación para Linux Ubuntu.
         - En host_2: `iperf -s -u -p 5001` (servidor)
         - En host_1: `iperf -c 10.0.0.2 -u -p 5001` (cliente)
         
-    - _Descartar mensajes de 2 hosts cualquiera:_ (O sino con pingall es mas directa la prueba)
-        - En host_1: `iperf -s -u -p 6969` (servidor)
-        - En host_2: `iperf -c 10.0.0.3 -u -p 6969` (cliente)
+    - _Descartar mensajes de 2 hosts cualquiera:_ (o sino con pingall es mas directa la prueba)
+        - En host_2: `iperf -s -u -p 6969` (servidor)
+        - En host_3: `iperf -c 10.0.0.2 -u -p 6969` (cliente)
 
-    - _Prueba adicional: bloqueo de ICMP, con hosts 3 y 4 abiertos, en mininet: `xterm host_3 host_4`
-        - En host_3: `ping 10.0.0.4`
+        - En host_3: `iperf -s -u -p 6969` (servidor)
+        - En host_2: (primero interrumpir servidor) `iperf -c 10.0.0.3 -u -p 6969` (cliente)
+
         
 5) Notas: para obtener el **dpid** (datapath id) de un switch y poder aplicarle reglas a este específicamente, se puede
 correr en mininet `dpctl show` lo cuál muestra mucha información de cada siwtch, la primer fila de respuesta de
